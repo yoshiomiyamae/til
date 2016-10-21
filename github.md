@@ -1,5 +1,5 @@
 # github
 ## til
-This is an abbribation of "Today I Larned".  
-I can put there what I larned today as a dialy, so that I can remember my history.  
-I don't need to ｌeave date time because that is left into commit log.
+This is an abbreviation of "Today I Learned".  
+I can put there what I learned today as a diary, so that I can remember my history.  
+I don't need to leave date time because that is left into commit log.  
