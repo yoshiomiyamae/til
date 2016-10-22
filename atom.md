@@ -15,6 +15,9 @@
 | `a` or `Add` | Add the file to commit |
 | `aa` or `Add All` | Add all file to commit |
 | `c` or `Commit` | Do commit |
+| `ps` or `Push` | Push to Remote|
+| `p` or `Pull` | Pull from Remote |
 | `ac` or `Add And Commit` | Add + Commit |
+| `acp` or `Add And Commit And Push` | Add + Commit + Push |
 | `aaac` or `Add All And Commit` | Add All + Commit |
 | `d` or `Diff` | Show difference |
