@@ -28,10 +28,13 @@
 Hyphens + : in the separator `|:--|--:|` should be more than 3 characters.
 
 ## Codes
-````
+<pre>
 ```
 Write codes here
 ```
-````
+</pre>
+```
+Write codes here
+```
 If you want to include back quotes into the code brackets, the brackets should have more than the back quotes.  
 e.g.) if you are using ``` `` ``` in the code, the brackets should have more than 3 characters ```` ``` ``` ````
