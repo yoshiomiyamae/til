@@ -1,4 +1,6 @@
-# Markdown
+Markdown
+===
+
 ## Headers
 ```
 # H1
@@ -38,3 +40,17 @@ Write codes here
 ```
 If you want to include back quotes into the code brackets, the brackets should have more than the back quotes.  
 e.g.) if you are using ``` `` ``` in the code, the brackets should have more than 3 characters ```` ``` ``` ````
+
+## Emphasis
+```
+_Italic_
+**Bold**
+```
+_Italic_  
+**Bold**  
+
+## Link
+```
+[Link Text](http://example.com)
+```
+[Link Text](http://example.com)
