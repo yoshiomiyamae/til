@@ -1,33 +1,32 @@
 FAT
 ===
 
-FAT is a filesystem that advocated by Microsoft.
-This is the abbreviation of **File Allocation Table**
-
-The original document can be downloaded from [Here](https://msdn.microsoft.com/en-us/windows/hardware/gg463080.aspx)
+FATはMicrosoftによって提唱されているファイルシステムで、**File Allocation Table** の略です。   
+Webで調べた内容が仕様書通りで無い事が多いので、基本的に仕様書の翻訳をしていきます。   
+仕様書の原文は[ここ](https://msdn.microsoft.com/en-us/windows/hardware/gg463080.aspx)からダウンロードできます。   
 
 ## FAT12 / FAT16
-The numbers 12 and 16 indicates the number of table element bits.
+12とか16はFATのサイズです。
 
-### Volume structure
-| Type | Name | Size [sectors] | Start Address [sectors] | Description |
+### ボリューム構造
+| 種類 | 名称 | サイズ [sectors] | 開始アドレス [sectors] | 説明 |
 |:--|---|---|---|--:|
-| Reserved Area | Boot Sector | `1` | `0` | Including a boot information such as BPB |
-| FAT Area | FAT | `BPB_FATSz16 * BPB_NumFATs` | `BPB_RsvdSecCnt` | Filesystem information |
-| Directory Area | Root Directory | `(BPB_RootEntCnt * 0x20 + BPB_BytesPerSec -1) / BPB_BytesPerSec` | `BPB_FATSz16 * BPB_NumFATs + BPB_RsvdSecCnt`   | Storing the directories information |
-| Data Area | Clasters | `BPB_NumClus * BPB_SecPerClus` | `(BPB_RootEntCnt * 0x20 + BPB_BytesPerSec -1) / BPB_BytesPerSec + BPB_FATSz16 * BPB_NumFATs + BPB_RsvdSecCnt` | Storing the files information |
-| Data Area | Undefined | `BPB_TotSec - (BPB_RootEntCnt * 0x20 + BPB_BytesPerSec -1) / BPB_BytesPerSec + BPB_FATSz16 * BPB_NumFATs + BPB_RsvdSecCnt` | `BPB_NumClus * BPB_SecPerClus + (BPB_RootEntCnt * 0x20 + BPB_BytesPerSec -1) / BPB_BytesPerSec + BPB_FATSz16 * BPB_NumFATs + BPB_RsvdSecCnt` | Undefined |
+| 予約領域 | ブートセクタ | `1` | `0` | BPBなどのブート情報を含んだ領域です |
+| FAT領域 | FAT | `BPB_FATSz16 * BPB_NumFATs` | `BPB_RsvdSecCnt` | FATです |
+| ディレクトリ領域 | ルートディレクトリ | `(BPB_RootEntCnt * 0x20 + BPB_BytsPerSec - 1) / BPB_BytsPerSec` | `BPB_FATSz16 * BPB_NumFATs + BPB_RsvdSecCnt`   | ディレクトリ情報を格納します |
+| データ領域 | クラスタ | `BPB_NumClus * BPB_SecPerClus` | `(BPB_RootEntCnt * 0x20 + BPB_BytsPerSec - 1) / BPB_BytsPerSec + BPB_FATSz16 * BPB_NumFATs + BPB_RsvdSecCnt` | ファイル情報を格納します |
+| データ領域 | 未定義 | `BPB_TotSec - (BPB_RootEntCnt * 0x20 + BPB_BytsPerSec - 1) / BPB_BytsPerSec + BPB_FATSz16 * BPB_NumFATs + BPB_RsvdSecCnt` | `BPB_NumClus * BPB_SecPerClus + (BPB_RootEntCnt * 0x20 + BPB_BytsPerSec - 1) / BPB_BytsPerSec + BPB_FATSz16 * BPB_NumFATs + BPB_RsvdSecCnt` | 未定義 |
 
-### BPB (BIOS Parameter Block) structure
-| Name | Size [bytes] | Start Address [bytes] | Description |
+### BPB (BIOS Parameter Block) 構造
+| 名称 | サイズ [bytes] | 開始アドレス [bytes] | 説明 |
 |:--|---|---|--:|
-| BS_JmpBoot | `3` | `0` |  |
-| BS_OEMName | `8` | `3` |  |
-| BPB_BytsPerSec | `2` | `11` |  |
-| BPB_SecPerClus | `1` | `13` |  |
-| BPB_RsvdSecCnt | `2` | `14` |  |
-| BPB_NumFATs | `1` | `16` |  |
-| BPB_RootEntCnt | `2` | `17` |  |
+| BS_JmpBoot | `3` | `0` | ブートコードへのジャンプ命令です。このフィールドは次の2種類のどちらかになります<br/>`0xEB 0x?? 0x90` `0xE9 0x?? 0x??`<br/>`0x??`は任意の8bitの値で、これはOSを起動するためのブートストラップコードへジャンプする、3bytesのx86の無条件ジャンプ命令です。 ブートストラップコードは通常、セクタ0のBPBより後の残りの部分に入っています(他のセクタの場合もある)。どちらのフォーマットも使えますが、`0xEB 0x?? 0x90`の方がよく使われています。 |
+| BS_OEMName | `8` | `3` | これは名前に過ぎません。MicrosoftのOSはこのフィールドはチェックしませんが、チェックするOSも存在します。互換性の問題を最小限に抑えるための設定として、`MSWIN4.1`を推奨します。他の値を設定することも可能ですが、そのボリュームを認識しないFATドライバも存在する可能性があります。通常、このボリュームをフォーマットしたシステムの名称です。 |
+| BPB_BytsPerSec | `2` | `11` | セクタあたりのサイズ[byte]で、`512` `1024` `2048` `4096`のみが使えます。互換性を最大限に保つためには、`512`を使うべきです。このフィールドが`512`であるか否かをチェックせずに、`512`と決め打ちするFATドライバも多数存在するからです。MicrosoftのOSは`1024` `2048` `4096`も正しくサポートします。 <br/>**注意:** 最大の互換性について誤解しないようにしてください。もしメディアに物理セクタサイズNが記録されるのであれば、必ずNを使用する必要があり(但し4096以下でなければならない)、最大の互換性は指定されたセクタサイズのメディアを使用することでのみ達成されます。|
+| BPB_SecPerClus | `1` | `13` | アロケーションユニット（クラスタ）たりのセクタ数です。この値は0以上の2の累乗でなければなりません。 従って、`1` `2` `4` `8` `16` `32` `64` `128`が有効な値ですが、クラスタあたりのバイト数`BPB_BytsPerSec * BPB_SecPerClus`が32KBより大きくなってはいけません。32KB以上でもOKと言う誤解がありますが、32KB以上では正しく動作しません。あるシステムのあるバージョンでは64KB/クラスタを容認しますが、殆どのアプリケーションセットアッププログラムはそのようなFATボリュームでは正しく動作しません。|
+| BPB_RsvdSecCnt | `2` | `14` | ボリュームの最初のセクタの初めにある予約領域のセクタ数です。FAT12とFAT16のボリュームにおいては、このフィールドを`0`にすることは出来ず、`1`以外は設定できません。FAT32のボリュームにおいては、通常`32`を設定します。<br/>このフィールドが`1`か否かをチェックセずに予約領域を`1`と決め打ちするFATドライバも多く存在します。MicrosoftのOSは`0`以外の値を正しくサポートします。 |
+| BPB_NumFATs | `1` | `16` | このボリューム上のFAT数です。このフィールドは`2`にするべきです。`1`以上の値も完全に正しいですが、いくつかのOSのFATドライバはこの値が2外の場合、正しく動作せず、多くのソフトウェア上の問題を起こすかもしれないからです。MicosoftのFATドライバは2以外の値もサポートしますが、`2`以外の値を使わないことを強く推奨します。<br/>標準値が`2`である理由は、片方のFATのあるセクタが壊れた場合に、重複させることでデータが消える事が無いよう、FATの冗長性を提供するためです。冗長化が意味をなさないフラッシュメモリのようなディスク以外のメディアの場合、2つめのFATに使われるスペースを節約するために`1`に出来ますが、いくつかのFATドライバはそのようなボリュームを正しく認識しないかもしれません。 |
+| BPB_RootEntCnt | `2` | `17` | FAT12及びFAT16のボリュームの場合、ルートディレクトリの32バイトのディレクトリ登録数が入ります。FAT32の場合、`0`をセットしなければなりません。FAT12及びFAT16のボリュームの場合、この値に32を乗じた値が`BPB_BytsPerSec`の偶数倍となるべきです。最大の互換性のために、FAT16ボリュームの場合、この値には`512`を使用すべきです。 |
 | BPB_TotSec16 | `2` | `19` |  |
 | BPB_Media | `1` | `21` |  |
 | BPB_FATSz16 | `2` | `22` |  |
@@ -41,3 +40,6 @@ The numbers 12 and 16 indicates the number of table element bits.
 | BS_VolID | `4` | `39` |  |
 | BS_VolLab | `11` | `43` |  |
 | BS_FilSysType | `8` | `54` |  |
+| ブートストラップコード | `448` | `62` | 使わなかった領域は`0`で埋める |
+| ブートシグネチャ | `2` | `510` | `0xAA55`でなければならない |
+| - | `BS_BytsPerSec - 512` | `512` | セクタの残りは`0`で埋める |
