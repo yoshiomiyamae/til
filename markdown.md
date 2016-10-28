@@ -19,15 +19,15 @@ Markdown
 
 ## Table
 ```
-| Header1 | Header2 |
-|:--|--:|
-| Content1 | Content2 |
+| Normal | Left align | Center align | Right align |
+|---|:--|:-:|--:|
+| Content1 | Content2 | Content1 | Content2 |
 ```
-| Header1 | Header2 |
-|:--|--:|
-| Content1 | Content2 |
+| Normal | Left align | Center align | Right align |
+|---|:--|:-:|--:|
+| Content1 | Content2 | Content1 | Content2 |
 
-Hyphens + : in the separator `|:--|--:|` should be more than 3 characters.
+Hyphens + : in the separator `|---|:--|:-:|--:|` should be more than 3 characters.
 
 ## Codes
 <pre>
