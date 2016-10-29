@@ -1,7 +1,7 @@
 # Atom
 ## Keyboard shortcuts
 | Key combination | Function |
-|:--|--:|
+|:-:|---|
 | `Ctrl + Shift + P` | Show Command pallet|
 | `Ctrl + Shift + H` | Show Git Plus Command pallet (Need install Git Plus) |
 | `Ctrl + Shit + M` | Show Markdown Preview |
@@ -10,7 +10,7 @@
 
 ## Packages
 | Package name | Description |
-|:--|--:|
+|---|---|
 | atom-runner | This helps debugging and allows to run the code from Atom |
 | git-plus | This can operate git repository from Atom |
 | autocomplete-python | Autocomplete function for Python |
@@ -19,11 +19,13 @@
 | open-recent | This adds a menu item of recently opened file |
 | file-icons | This shows icons assigned the extension |
 | project-manager | This helps operation of projects |
+| terminal-plus | Show tarminal in Atom |
+| highlight-selected | Highlight selected word |
 
 ## Git Plus
 ### Commands
 | Command | Function |
-|:--|--:|
+|:-:|---|
 | `a` or `Add` | Add the file to commit |
 | `aa` or `Add All` | Add all file to commit |
 | `c` or `Commit` | Do commit |
