@@ -8,7 +8,7 @@ til
 + [Life](life.md)  
 + [Programming](programming/index.md)
  + go
-  + [HUGO](programming/go/hugo.md)
+   + [HUGO](programming/go/hugo.md)
  + [x86 Assembler](programming/x86_assembler.md)
 + Filesystem
  + [FAT](filesystem/fat.md)
